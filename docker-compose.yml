@@ -1,0 +1,10 @@
+services:
+  assesstly-ui:
+    image: ${IMAGE_NAME:-ghcr.io/dragonflytechsolutions/assesstly-ui}:${IMAGE_TAG:-latest}
+    ports:
+      - "${HTTP_PORT:-12080}:80"
+    restart: unless-stopped
+    labels:
+      - "com.dragonfly.stack=${STACK_NAME:-assesstly}"
+      - "com.dragonfly.suffix=${STACK_SUFFIX:-prod}"
+      - "com.dragonfly.version=${BUILD_VERSION:-0.0.0.0}"

@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ng *)",
+      "Bash(gh auth *)",
+      "Bash(gh --version)",
+      "Bash(sudo apt *)",
+      "Bash(curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg)",
+      "Bash(sudo dd *)",
+      "Bash(dpkg --print-architecture)",
+      "Bash(echo \"deb [arch=$\\(dpkg --print-architecture\\) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\")",
+      "Bash(sudo tee *)",
+      "Read(//home/gcastro/**)",
+      "Bash(echo 'export PATH=\"$HOME/.local/bin:$PATH\"')",
+      "Bash(export PATH=\"$HOME/.local/bin:$PATH\")",
+      "Bash(~/.local/bin/gh api *)",
+      "Bash(~/.local/bin/gh repo *)",
+      "Bash(python3 -c \"import json,sys; [print\\(r['name'], '\\(private\\)' if r['isPrivate'] else ''\\) for r in json.load\\(sys.stdin\\)]\")",
+      "Bash(python3 -c \"import json,sys; [print\\(e['name']\\) for e in json.load\\(sys.stdin\\)['environments']]\")",
+      "Bash(~/.local/bin/gh secret *)",
+      "Bash(netstat -tlnp)"
+    ]
+  }
+}

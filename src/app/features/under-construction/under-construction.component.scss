@@ -1,0 +1,372 @@
+/* under-construction.component.scss — Assesstly */
+
+/* ─── Google Fonts ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Space+Mono&display=swap');
+
+/* ─── Design Tokens ────────────────────────────────────── */
+:host {
+  --primary:    #ff8c00;
+  --primary-dim:#e65100;
+  --accent:     #e53935;
+  --gold:       #ffd600;
+  --bg-deep:    #0d0500;
+  --bg-mid:     #120700;
+  --bg-card:    #1a0900;
+  --text-primary: #fff3e0;
+  --text-muted:   #795548;
+  --glow-primary: 0 0 20px rgba(255,140,0,0.4), 0 0 60px rgba(255,140,0,0.15);
+  --glow-accent:  0 0 30px rgba(229,57,53,0.3);
+
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ─── Root Container ───────────────────────────────────── */
+.uc-root {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-deep);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Radial gradient for depth */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 10%, rgba(255,140,0,0.09) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(229,57,53,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+/* ─── Particle Canvas ──────────────────────────────────── */
+.uc-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ─── Grid Overlay ─────────────────────────────────────── */
+.uc-grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,140,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,140,0,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* ─── Main Layout ──────────────────────────────────────── */
+.uc-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  padding: 2rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* ─── Header / Brand ───────────────────────────────────── */
+.uc-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  animation: fadeSlideDown 0.8s ease both;
+}
+
+.uc-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.uc-dragonfly-svg {
+  width: 56px;
+  height: 48px;
+  filter: drop-shadow(0 0 10px var(--primary)) drop-shadow(0 0 30px rgba(255,140,0,0.4));
+  animation: dragonfly-hover 4s ease-in-out infinite;
+}
+
+.uc-brand-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* ─── Hero Section ─────────────────────────────────────── */
+.uc-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1s ease 0.3s both;
+}
+
+/* Orbit ring */
+.uc-orbit-ring {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,140,0, 0.12);
+  animation: orbit-spin 20s linear infinite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px dashed rgba(229,57,53, 0.15);
+  }
+}
+
+.uc-orbit-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff8c00;
+  box-shadow: 0 0 12px #ff8c00, 0 0 4px #ff8c00;
+}
+
+.uc-dot-1 { top: -4px;  left: 50%; transform: translateX(-50%); }
+.uc-dot-2 { bottom: -4px; left: 30%; transform: translateX(-50%); background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+.uc-dot-3 { right: -4px;  top: 50%; transform: translateY(-50%); background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+
+/* Product card */
+.uc-product-card {
+  position: relative;
+  border-radius: 16px;
+  padding: 3px;
+  background: linear-gradient(135deg, #ff8c00 0%, #e53935 50%, #ffd600 100%);
+  box-shadow: var(--glow-primary), var(--glow-accent);
+  animation: card-pulse 3s ease-in-out infinite;
+}
+
+.uc-card-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.uc-card-inner {
+  background: var(--bg-card);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uc-monitor-svg {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  filter: drop-shadow(0 4px 24px rgba(255,140,0,0.15));
+}
+
+/* ─── Copy ─────────────────────────────────────────────── */
+.uc-copy {
+  text-align: center;
+  animation: fadeSlideUp 0.9s ease 0.5s both;
+}
+
+.uc-tagline {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  font-weight: 300;
+  color: var(--primary);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 0.2rem;
+  opacity: 0.85;
+}
+
+.uc-headline {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin: 0 0 1.2rem;
+  background: linear-gradient(135deg, #ffffff 0%, #ff8c00 45%, #e53935 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 40px rgba(255,140,0,0.25));
+}
+
+.uc-sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 400;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+}
+
+/* ─── CTA Button ───────────────────────────────────────── */
+.uc-cta-wrap {
+  animation: fadeSlideUp 1s ease 0.7s both;
+}
+
+.uc-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 2.2rem;
+  border-radius: 50px;
+  border: 1.5px solid var(--primary);
+  background: rgba(255,140,0, 0.07);
+  color: var(--primary);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(255,140,0,0.15), rgba(229,57,53,0.1));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    background: rgba(255,140,0, 0.15);
+    box-shadow: 0 0 30px rgba(255,140,0,0.3), 0 0 8px rgba(255,140,0,0.2);
+    transform: translateY(-2px);
+
+    &::before { opacity: 1; }
+
+    .uc-btn-arrow { transform: translateX(4px); }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.uc-btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+.uc-btn-arrow {
+  font-size: 1.1rem;
+  transition: transform 0.25s;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Footer ───────────────────────────────────────────── */
+.uc-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  animation: fadeIn 1.2s ease 1s both;
+}
+
+.uc-powered {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.uc-powered-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--primary);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+    text-shadow: 0 0 10px var(--primary);
+  }
+}
+
+/* ─── Animations ───────────────────────────────────────── */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes dragonfly-hover {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%       { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes card-pulse {
+  0%, 100% { box-shadow: var(--glow-primary), var(--glow-accent); }
+  50%       { box-shadow: 0 0 40px rgba(255,140,0,0.6), 0 0 80px rgba(255,140,0,0.2), 0 0 50px rgba(229,57,53,0.45); }
+}
+
+/* ─── Responsive ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .uc-orbit-ring {
+    width: 280px;
+    height: 280px;
+  }
+
+  .uc-brand-name {
+    font-size: 0.7rem;
+  }
+
+  .uc-cta-btn {
+    font-size: 0.7rem;
+    padding: 0.75rem 1.5rem;
+  }
+}

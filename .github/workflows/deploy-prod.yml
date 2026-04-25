@@ -1,0 +1,138 @@
+name: Production Deploy (PR approve / merge / manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Optional image tag (defaults to short SHA)'
+        required: false
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  deploy:
+    environment: prod
+    if: |
+      github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Calculate BUILD_VERSION
+        id: version
+        run: |
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          MAJOR=$(($COMMIT_COUNT / 1000))
+          MINOR=$((($COMMIT_COUNT % 1000) / 100))
+          PATCH=$((($COMMIT_COUNT % 100) / 10))
+          BUILD=$(($COMMIT_COUNT % 10))
+          if [ $MAJOR -eq 0 ]; then MAJOR=1; fi
+          BUILD_VERSION="${MAJOR}.${MINOR}.${PATCH}.${BUILD}"
+          echo "build_version=$BUILD_VERSION" >> $GITHUB_OUTPUT
+          echo "BUILD_VERSION: $BUILD_VERSION (commits: $COMMIT_COUNT)"
+
+      - name: Calculate image tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.tag }}" ]; then
+            echo "value=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "value=${GITHUB_SHA::12}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure Angular environment (production)
+        run: |
+          cat > src/environments/environment.ts << 'EOF'
+          export const environment = {
+            production: true,
+            appId: '${{ vars.APP_ID_PROD }}',
+            apiUrl: '${{ vars.API_URL_PROD }}',
+            authUrl: '${{ vars.AUTH_URL_PROD }}',
+            appUrl: '${{ vars.APP_URL_PROD }}',
+            buildVersion: '${{ steps.version.outputs.build_version }}',
+            enableSEAButton: ${{ vars.ENABLE_SEA_BUTTON }}
+          };
+          EOF
+          echo "Generated environment.ts for production:"
+          cat src/environments/environment.ts
+
+      - name: Compute image name (lowercase)
+        id: img
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & Push ARM64 image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          build-args: |
+            BUILD_CONFIGURATION=production
+          tags: |
+            ${{ steps.img.outputs.image }}:${{ steps.tag.outputs.value }}
+            ${{ steps.img.outputs.image }}:latest
+          labels: |
+            org.opencontainers.image.source=${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ steps.tag.outputs.value }}
+
+      - name: Portainer API ping (debug)
+        run: |
+          set -e
+          echo "Pinging ${{ secrets.PORTAINER_URL }}/api/status ..."
+          curl -sS --fail -H "X-API-Key: ${{ secrets.PORTAINER_TOKEN }}" \
+            "${{ secrets.PORTAINER_URL }}/api/status" > /dev/null
+          echo "Portainer API reachable."
+
+      - name: Deploy stack in Portainer
+        uses: cssnr/portainer-stack-deploy-action@v1
+        with:
+          url: ${{ secrets.PORTAINER_URL }}
+          token: ${{ secrets.PORTAINER_TOKEN }}
+          endpoint: ${{ secrets.PORTAINER_ENDPOINT_ID }}
+          name: assesstly
+          file: docker-compose.yml
+          type: file
+          standalone: true
+          pull: true
+          prune: true
+          env_json: >-
+            {
+              "IMAGE_NAME":"${{ steps.img.outputs.image }}",
+              "IMAGE_TAG":"${{ steps.tag.outputs.value }}",
+              "STACK_NAME":"assesstly",
+              "STACK_SUFFIX":"prod",
+              "HTTP_PORT":"12080",
+              "BUILD_VERSION":"${{ steps.version.outputs.build_version }}"
+            }
+          merge_env: true
+
+      - name: Summary
+        run: |
+          echo "🚀 Production Deployment Summary:"
+          echo "   Image: ${{ steps.img.outputs.image }}:${{ steps.tag.outputs.value }}"
+          echo "   Build Version: ${{ steps.version.outputs.build_version }}"
+          echo "   Stack: assesstly"
