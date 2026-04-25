@@ -125,7 +125,7 @@ jobs:
               "IMAGE_TAG":"${{ steps.tag.outputs.value }}",
               "STACK_NAME":"assesstly",
               "STACK_SUFFIX":"prod",
-              "HTTP_PORT":"12080",
+              "HTTP_PORT":"11180",
               "BUILD_VERSION":"${{ steps.version.outputs.build_version }}"
             }
           merge_env: true
