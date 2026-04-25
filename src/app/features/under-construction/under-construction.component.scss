@@ -1,28 +1,25 @@
 /* under-construction.component.scss — Assesstly */
 
-/* ─── Google Fonts ─────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Uncial+Antiqua&display=swap');
 
-/* ─── Design Tokens ────────────────────────────────────── */
 :host {
-  --primary:    #ff8c00;
-  --primary-dim:#e65100;
-  --accent:     #e53935;
-  --gold:       #ffd600;
-  --bg-deep:    #0d0500;
-  --bg-mid:     #120700;
-  --bg-card:    #1a0900;
-  --text-primary: #fff3e0;
-  --text-muted:   #795548;
-  --glow-primary: 0 0 20px rgba(255,140,0,0.4), 0 0 60px rgba(255,140,0,0.15);
-  --glow-accent:  0 0 30px rgba(229,57,53,0.3);
+  --purple:      #b482ff;
+  --purple-deep: #7b3fe4;
+  --gold:        #ffc832;
+  --teal:        #7affea;
+  --bg-deep:     #0a0705;
+  --bg-mid:      #12080e;
+  --bg-card:     #0d0518;
+  --text-primary: #e8dff5;
+  --text-muted:   #7a6890;
+  --glow-purple:  0 0 30px rgba(180,130,255,0.35), 0 0 80px rgba(180,130,255,0.12);
+  --glow-gold:    0 0 20px rgba(255,200,50,0.2);
 
   display: block;
   width: 100%;
   min-height: 100vh;
 }
 
-/* ─── Root Container ───────────────────────────────────── */
 .uc-root {
   position: relative;
   min-height: 100vh;
@@ -33,44 +30,60 @@
   align-items: center;
   justify-content: center;
 
-  /* Radial gradient for depth */
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 10%, rgba(255,140,0,0.09) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(229,57,53,0.07) 0%, transparent 70%);
+      radial-gradient(ellipse 70% 50% at 50% 30%, rgba(180,130,255,0.09) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 50% 80%, rgba(255,200,50,0.06) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
 }
 
-/* ─── Particle Canvas ──────────────────────────────────── */
-.uc-canvas {
+.uc-stars {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.6;
 }
 
-/* ─── Grid Overlay ─────────────────────────────────────── */
-.uc-grid-overlay {
+/* Parchment border frame */
+.uc-frame {
   position: absolute;
-  inset: 0;
-  z-index: 0;
+  inset: 12px;
+  border: 1px solid rgba(180,130,255,0.15);
+  border-radius: 8px;
   pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,140,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,140,0,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  z-index: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(255,200,50,0.08);
+    border-radius: 4px;
+  }
 }
 
-/* ─── Main Layout ──────────────────────────────────────── */
+/* Corner runes */
+.uc-rune {
+  position: absolute;
+  font-family: 'Uncial Antiqua', serif;
+  font-size: 1.1rem;
+  color: rgba(180,130,255,0.3);
+  z-index: 1;
+  animation: rune-pulse 3s ease-in-out infinite;
+
+  &.uc-rune-tl { top: 20px;    left: 20px;  }
+  &.uc-rune-tr { top: 20px;    right: 20px; animation-delay: .75s; }
+  &.uc-rune-bl { bottom: 20px; left: 20px;  animation-delay: 1.5s; }
+  &.uc-rune-br { bottom: 20px; right: 20px; animation-delay: 2.25s; }
+}
+
 .uc-main {
   position: relative;
   z-index: 1;
@@ -80,179 +93,196 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.8rem;
 }
 
-/* ─── Header / Brand ───────────────────────────────────── */
+/* Header */
 .uc-header {
-  width: 100%;
   display: flex;
   justify-content: center;
-  animation: fadeSlideDown 0.8s ease both;
+  animation: fadeDown .8s ease both;
 }
 
 .uc-logo-wrap {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: .7rem;
 }
 
-.uc-dragonfly-svg {
-  width: 56px;
-  height: 48px;
-  filter: drop-shadow(0 0 10px var(--primary)) drop-shadow(0 0 30px rgba(255,140,0,0.4));
-  animation: dragonfly-hover 4s ease-in-out infinite;
+.uc-dfly {
+  width: 50px;
+  height: 44px;
+  filter: drop-shadow(0 0 8px rgba(180,130,255,0.6)) drop-shadow(0 0 24px rgba(180,130,255,0.3));
+  animation: hover-dfly 4s ease-in-out infinite;
 }
 
 .uc-brand-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.85rem;
+  font-family: 'Cinzel', serif;
+  font-size: .72rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
-  color: var(--primary);
+  letter-spacing: .18em;
+  color: rgba(180,130,255,0.8);
   text-transform: uppercase;
-  opacity: 0.9;
 }
 
-/* ─── Hero Section ─────────────────────────────────────── */
+/* Hero */
 .uc-hero {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: fadeIn 1s ease 0.3s both;
+  animation: fadeIn 1s ease .3s both;
 }
 
-/* Orbit ring */
-.uc-orbit-ring {
+.uc-magic-circle {
   position: absolute;
   width: 360px;
   height: 360px;
   border-radius: 50%;
-  border: 1px solid rgba(255,140,0, 0.12);
-  animation: orbit-spin 20s linear infinite;
+  border: 1px solid rgba(180,130,255,0.12);
+  animation: spin-slow 30s linear infinite;
 
   &::before {
     content: '';
     position: absolute;
-    inset: 20px;
+    inset: 14px;
     border-radius: 50%;
-    border: 1px dashed rgba(229,57,53, 0.15);
+    border: 1px dashed rgba(255,200,50,0.1);
+    animation: spin-slow 20s linear infinite reverse;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(180,130,255,0.07);
   }
 }
 
-.uc-orbit-dot {
+.uc-orb {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #ff8c00;
-  box-shadow: 0 0 12px #ff8c00, 0 0 4px #ff8c00;
+
+  &.uc-orb-1 { top: -3px; left: 50%; transform: translateX(-50%); background: #b482ff; box-shadow: 0 0 10px #b482ff; }
+  &.uc-orb-2 { bottom: -3px; right: 30%; background: #ffc832; box-shadow: 0 0 10px #ffc832; }
+  &.uc-orb-3 { left: -3px; top: 40%; background: #7affea; box-shadow: 0 0 10px #7affea; }
 }
 
-.uc-dot-1 { top: -4px;  left: 50%; transform: translateX(-50%); }
-.uc-dot-2 { bottom: -4px; left: 30%; transform: translateX(-50%); background: var(--accent); box-shadow: 0 0 12px var(--accent); }
-.uc-dot-3 { right: -4px;  top: 50%; transform: translateY(-50%); background: var(--gold); box-shadow: 0 0 12px var(--gold); }
-
-/* Product card */
-.uc-product-card {
+.uc-wizard-card {
   position: relative;
   border-radius: 16px;
   padding: 3px;
-  background: linear-gradient(135deg, #ff8c00 0%, #e53935 50%, #ffd600 100%);
-  box-shadow: var(--glow-primary), var(--glow-accent);
-  animation: card-pulse 3s ease-in-out infinite;
-}
-
-.uc-card-glow {
-  position: absolute;
-  inset: -20px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: -1;
+  background: linear-gradient(135deg, #b482ff 0%, #7b3fe4 40%, #ffc832 100%);
+  box-shadow: var(--glow-purple), 0 20px 60px rgba(0,0,0,0.5);
+  animation: card-glow 4s ease-in-out infinite;
 }
 
 .uc-card-inner {
-  background: var(--bg-card);
+  background: linear-gradient(160deg, #12080e 0%, #0d0518 100%);
   border-radius: 14px;
-  padding: 1.25rem;
+  padding: 1.2rem 1.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.uc-monitor-svg {
+.uc-wizard-svg {
   width: 100%;
   max-width: 340px;
   height: auto;
-  filter: drop-shadow(0 4px 24px rgba(255,140,0,0.15));
 }
 
-/* ─── Copy ─────────────────────────────────────────────── */
+/* Copy */
 .uc-copy {
   text-align: center;
-  animation: fadeSlideUp 0.9s ease 0.5s both;
+  animation: fadeUp .9s ease .5s both;
 }
 
-.uc-tagline {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(1.4rem, 4vw, 2.2rem);
-  font-weight: 300;
-  color: var(--primary);
-  letter-spacing: 0.25em;
+.uc-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: .75rem;
+  font-weight: 400;
+  color: rgba(255,200,50,0.7);
+  letter-spacing: .4em;
   text-transform: uppercase;
-  margin: 0 0 0.2rem;
-  opacity: 0.85;
+  margin-bottom: .5rem;
 }
 
 .uc-headline {
-  font-family: 'Orbitron', monospace;
-  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.8rem, 5.5vw, 3.8rem);
   font-weight: 900;
-  line-height: 1.05;
-  margin: 0 0 1.2rem;
-  background: linear-gradient(135deg, #ffffff 0%, #ff8c00 45%, #e53935 100%);
+  line-height: 1.1;
+  margin-bottom: .3rem;
+  background: linear-gradient(135deg, #ffffff 0%, #d4a8ff 40%, #ffc832 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  filter: drop-shadow(0 0 40px rgba(255,140,0,0.25));
+  filter: drop-shadow(0 0 30px rgba(180,130,255,0.3));
+}
+
+.uc-tagline-magic {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(.9rem, 2.5vw, 1.3rem);
+  font-weight: 400;
+  color: rgba(180,130,255,0.7);
+  letter-spacing: .15em;
+  margin-bottom: 1rem;
+  font-style: italic;
 }
 
 .uc-sub {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  font-weight: 400;
-  color: var(--text-muted);
-  max-width: 520px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: rgba(200,185,220,0.65);
+  max-width: 500px;
   margin: 0 auto;
-  line-height: 1.7;
-  letter-spacing: 0.03em;
+  line-height: 1.75;
+  font-style: italic;
 }
 
-/* ─── CTA Button ───────────────────────────────────────── */
-.uc-cta-wrap {
-  animation: fadeSlideUp 1s ease 0.7s both;
+/* AI badge */
+.uc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .4rem 1.2rem;
+  border-radius: 50px;
+  border: 1px solid rgba(255,200,50,0.25);
+  background: rgba(255,200,50,0.06);
+  font-family: 'Cinzel', serif;
+  font-size: .65rem;
+  letter-spacing: .2em;
+  color: rgba(255,200,50,0.7);
+  text-transform: uppercase;
+  animation: badge-pulse 2.5s ease-in-out infinite;
 }
+
+/* CTA */
+.uc-cta-wrap { animation: fadeUp 1s ease .7s both; }
 
 .uc-cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 2.2rem;
-  border-radius: 50px;
-  border: 1.5px solid var(--primary);
-  background: rgba(255,140,0, 0.07);
-  color: var(--primary);
-  font-family: 'Orbitron', monospace;
-  font-size: 0.78rem;
+  gap: .6rem;
+  padding: .8rem 2rem;
+  border-radius: 4px;
+  border: 1px solid rgba(180,130,255,0.4);
+  background: rgba(180,130,255,0.08);
+  color: rgba(180,130,255,0.9);
+  font-family: 'Cinzel', serif;
+  font-size: .7rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: .15em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  transition: all .3s;
   position: relative;
   overflow: hidden;
 
@@ -260,113 +290,65 @@
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 50px;
-    background: linear-gradient(135deg, rgba(255,140,0,0.15), rgba(229,57,53,0.1));
+    background: linear-gradient(135deg, rgba(180,130,255,0.15), rgba(255,200,50,0.05));
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity .3s;
   }
 
   &:hover {
-    background: rgba(255,140,0, 0.15);
-    box-shadow: 0 0 30px rgba(255,140,0,0.3), 0 0 8px rgba(255,140,0,0.2);
+    border-color: rgba(180,130,255,0.7);
+    box-shadow: 0 0 30px rgba(180,130,255,0.25);
     transform: translateY(-2px);
 
     &::before { opacity: 1; }
-
     .uc-btn-arrow { transform: translateX(4px); }
   }
-
-  &:active {
-    transform: translateY(0);
-  }
 }
 
-.uc-btn-text {
-  position: relative;
-  z-index: 1;
-}
+.uc-btn-text { position: relative; z-index: 1; }
+.uc-btn-arrow { transition: transform .25s; position: relative; z-index: 1; }
 
-.uc-btn-arrow {
-  font-size: 1.1rem;
-  transition: transform 0.25s;
-  position: relative;
-  z-index: 1;
-}
-
-/* ─── Footer ───────────────────────────────────────────── */
+/* Footer */
 .uc-footer {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: .4rem;
   animation: fadeIn 1.2s ease 1s both;
 }
 
 .uc-powered {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
+  font-family: 'Cinzel', serif;
+  font-size: .6rem;
+  color: rgba(150,120,180,0.4);
+  letter-spacing: .1em;
 }
 
 .uc-powered-link {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--primary);
+  font-family: 'Cinzel', serif;
+  font-size: .6rem;
+  color: rgba(180,130,255,0.5);
   text-decoration: none;
-  letter-spacing: 0.08em;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+  letter-spacing: .1em;
+  transition: color .2s;
 
-  &:hover {
-    opacity: 1;
-    text-shadow: 0 0 10px var(--primary);
-  }
+  &:hover { color: rgba(180,130,255,0.9); }
 }
 
-/* ─── Animations ───────────────────────────────────────── */
-@keyframes fadeSlideDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Animations */
+@keyframes fadeDown  { from { opacity: 0; transform: translateY(-16px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes fadeUp    { from { opacity: 0; transform: translateY(16px)  } to { opacity: 1; transform: translateY(0) } }
+@keyframes fadeIn    { from { opacity: 0 } to { opacity: 1 } }
+@keyframes hover-dfly { 0%,100% { transform: translateY(0) rotate(-2deg) } 50% { transform: translateY(-7px) rotate(2deg) } }
+@keyframes spin-slow  { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+@keyframes rune-pulse { 0%,100% { opacity: .3; transform: scale(1) } 50% { opacity: .7; transform: scale(1.1) } }
+@keyframes badge-pulse { 0%,100% { box-shadow: 0 0 0 rgba(255,200,50,0) } 50% { box-shadow: 0 0 15px rgba(255,200,50,0.15) } }
+@keyframes card-glow {
+  0%,100% { box-shadow: var(--glow-purple), 0 20px 60px rgba(0,0,0,0.5) }
+  50%      { box-shadow: 0 0 50px rgba(180,130,255,0.5), 0 0 120px rgba(180,130,255,0.15), 0 20px 60px rgba(0,0,0,0.5) }
 }
 
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes dragonfly-hover {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50%       { transform: translateY(-8px) rotate(2deg); }
-}
-
-@keyframes orbit-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes card-pulse {
-  0%, 100% { box-shadow: var(--glow-primary), var(--glow-accent); }
-  50%       { box-shadow: 0 0 40px rgba(255,140,0,0.6), 0 0 80px rgba(255,140,0,0.2), 0 0 50px rgba(229,57,53,0.45); }
-}
-
-/* ─── Responsive ───────────────────────────────────────── */
 @media (max-width: 600px) {
-  .uc-orbit-ring {
-    width: 280px;
-    height: 280px;
-  }
-
-  .uc-brand-name {
-    font-size: 0.7rem;
-  }
-
-  .uc-cta-btn {
-    font-size: 0.7rem;
-    padding: 0.75rem 1.5rem;
-  }
+  .uc-magic-circle { width: 280px; height: 280px; }
+  .uc-brand-name   { font-size: .62rem; }
+  .uc-cta-btn      { font-size: .62rem; padding: .7rem 1.4rem; }
 }

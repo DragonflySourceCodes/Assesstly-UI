@@ -15,7 +15,7 @@ RUN npx ng build --configuration=${BUILD_CONFIGURATION}
 # ─── Stage 2: Serve ───────────────────────────────────────────────────────────
 FROM nginx:1.27-alpine
 
-COPY --from=builder /app/dist/torke-market-ui/browser /usr/share/nginx/html
+COPY --from=builder /app/dist/assesstly-ui/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
